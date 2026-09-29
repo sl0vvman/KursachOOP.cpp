@@ -1,0 +1,17 @@
+*.user
+*.user.*
+.qtcreator/
+build*/
+CMakeLists.txt.user
+CMakeFiles/
+CMakeCache.txt
+CMakePresets.json
+cmake_install.cmake
+.vs/
+*.sln
+*.vcxproj
+*.filters
+*.proto
+*.suo
+Thumbs.db
+.DS_Store
