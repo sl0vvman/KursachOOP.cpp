@@ -27,11 +27,11 @@ public:
     virtual Metering takeMetering() const = 0;
 };
 
-class InSideSensor:Sensor
+class InSideSensor: public Sensor
 {
 
 };
-class OutSideSensor:Sensor
+class OutSideSensor: public Sensor
 {
 
 };
