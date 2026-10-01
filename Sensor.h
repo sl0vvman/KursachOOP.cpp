@@ -4,7 +4,7 @@
 #include "Metering.h"
 
 enum class sensorStatus{Active,Inactive};
-
+enum class sensorType { inside,outside };
 enum class roomTypeForSensor{livingRoom,officeRoom,industrialRoom};
 
 class Sensor
@@ -15,6 +15,7 @@ private:
     std::string location;
 public:
     virtual Metering takeMetering() const = 0;
+    Sensor(int id, sensorStatus status, const std::string& location);
     virtual ~Sensor() {}
 };
 
@@ -23,25 +24,29 @@ class InSideSensor : public Sensor
 {
 private:
     roomTypeForSensor roomType;
+public:
+    Metering takeMetering() const override;
+    InSideSensor(int id, sensorStatus status, const std::string& location, roomTypeForSensor roomType);
 };
+
+
 class OutSideSensor : public Sensor
 {
 private:
     int windSpeed;
     bool isRaining;
+public:
+    Metering takeMetering() const override;
+    OutSideSensor(int id, sensorStatus status, const std::string& location,int windSpeed,bool isRaining);
 };
 
 
 class SensorFactory
 {
 public:
-    static Sensor* createSensor(const std::string& type, int id, sensorStatus status, const std::string& location);
+    static Sensor* createSensor(const sensorType type, int id, sensorStatus status, const std::string& location);
 };
 
-//SensorFactory::createSensor(const std::string& type, int id, sensorStatus sensorStatus, const std::string& location)
-//{
-//
-//}
 
 class sensorMap
 {
@@ -53,16 +58,5 @@ public:
     void addSensor(Sensor* addingSensor);
     void takeAllSensorMetering();
 };
-sensorMap::sensorMap()
-{
 
-}
-sensorMap::~sensorMap()
-{
-    for (Sensor* sensorPtr : citySensors)
-    {
-        delete sensorPtr;
-    }
-    citySensors.clear();
-}
 
