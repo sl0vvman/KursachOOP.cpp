@@ -19,10 +19,17 @@ Metering::Metering(int sensorID,double decibels,std::time_t meteringTime)
     this->meteringTime = meteringTime;
 }
 
+enum class sensorStatus
+{
+    Active,
+    Inactive
+};
+
 class Sensor
 {
 private:
     int id;
+    sensorStatus sensorStatus;
     std::string location;
 public:
     virtual Metering takeMetering() const = 0;
