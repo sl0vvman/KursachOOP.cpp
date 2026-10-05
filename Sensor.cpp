@@ -17,12 +17,21 @@ InSideSensor::InSideSensor(int id, sensorStatus status, const std::string& locat
 {
     this->roomType = roomType;
 }
+Metering InSideSensor::takeMetering() const
+{
+    std::time_t t;
+    return Metering(1,1,t);
+}
 OutSideSensor::OutSideSensor(int id, sensorStatus status, const std::string& location, int windSpeed, bool isRaining) : Sensor(id, status, location)
 {
     this->isRaining = isRaining;
     this->windSpeed = windSpeed;
 }
-
+Metering OutSideSensor::takeMetering() const
+{
+    std::time_t t;
+    return Metering(1,1,t);
+}
 sensorMap::sensorMap()
 {
 
