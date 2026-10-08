@@ -5,7 +5,9 @@ project(KursovRabotaTheme9 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(KursovRabotaTheme9 main.cpp "Metering.h" "Metering.cpp" "Sensor.h" "Sensor.cpp")
+add_executable(KursovRabotaTheme9 main.cpp "Metering.h" "Metering.cpp" "Sensor.h" "Sensor.cpp"
+    observer.h
+    observer.cpp)
 
 include(GNUInstallDirs)
 install(TARGETS KursovRabotaTheme9
