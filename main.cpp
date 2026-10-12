@@ -2,5 +2,5 @@
 #include "Metering.h"
 int main()
 {
-}                                     // подписчик
+}
 

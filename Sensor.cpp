@@ -21,11 +21,11 @@ void Sensor::attach(NoiseObserver* observ)
 {
     observers.push_back(observ);
 }
-void Sensor::Notify(double limit) const
+void Sensor::Notify(const NoiseNorm& norm) const
 {
     if(!isActive())return;
     Metering m = takeMetering();
-    if(m.isNormslNoise(limit))
+    if(norm.isExceeded(m, place(), time))
     {
         for(NoiseObserver* observ:observers)
         {
@@ -46,6 +46,34 @@ InSideSensor::InSideSensor(int id, sensorStatus status,timeOfDay timeOfDay , roo
 {
     this->roomType = roomType;
 }
+placeType InSideSensor::place() const
+{
+    placeType target = placeType::none;
+    switch (roomType)
+    {
+    case roomTypeForSensor::livingRoom:
+    {
+        target = placeType::livingRoom;
+        break;
+    }
+    case roomTypeForSensor::officeRoom:
+    {
+        target = placeType::officeRoom;
+        break;
+    }
+    case roomTypeForSensor::industrialRoom:
+    {
+        target = placeType::industrialRoom;
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
+
+    return target;
+}
 Metering InSideSensor::takeMetering() const
 {
     double db=30;
@@ -58,6 +86,11 @@ OutSideSensor::OutSideSensor(int id, sensorStatus status,timeOfDay timeOfDay, in
 {
     this->isRaining = isRaining;
     this->windSpeed = windSpeed;
+}
+
+placeType OutSideSensor::place() const 
+{
+    return placeType::street;
 }
 
 Metering OutSideSensor::takeMetering() const
@@ -80,23 +113,23 @@ sensorMap::~sensorMap()
     citySensors.clear();
 }
 
-void sensorMap::takeAllSensorMetering()
+void sensorMap::notifyAll(const NoiseNorm& norm) const
 {
-
+    for (Sensor* sensorPtr : citySensors)
+    {
+        sensorPtr->Notify(norm);
+    }
 }
 
-Sensor* SensorFactory::createSensor(const sensorType type, int id, sensorStatus status,timeOfDay timeOfDay)
+Sensor* SensorFactory::createSensor(sensorType type, int id, sensorStatus status, timeOfDay part,roomTypeForSensor room, int windSpeed, bool isRaining)
 {
     if (type == sensorType::inside)
     {
-        roomTypeForSensor rType = roomTypeForSensor::livingRoom;
-        return new InSideSensor(id, status,timeOfDay, rType);
+        return new InSideSensor(id, status, part, room);
     }
-    else if (type == sensorType::outside)
+    if (type == sensorType::outside)
     {
-        int windSpeed = 0;
-        bool isRaining = false;
-        return new OutSideSensor(id, status,timeOfDay, windSpeed, isRaining);
+        return new OutSideSensor(id, status, part, windSpeed, isRaining);
     }
     return nullptr;
 }

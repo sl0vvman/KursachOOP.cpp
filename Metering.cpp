@@ -13,7 +13,7 @@ Metering::~Metering()
 
 }
 
-bool Metering::isNormslNoise(double limit) const
+bool Metering::isNotNormslNoise(double limit) const
 {
     return decibels > limit;
 }

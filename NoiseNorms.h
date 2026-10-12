@@ -1,8 +1,9 @@
 #pragma once
 #include <map>
+#include <tuple>
 #include "Metering.h"
 enum class  timeOfDay {day,night};
-enum class  placeType {livingRoom, officeRoom, industrialRoom, street};
+enum class  placeType {livingRoom, officeRoom, industrialRoom, street, none};
 
 struct Limits
 {
