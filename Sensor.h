@@ -3,10 +3,10 @@
 #include <vector>
 #include "Metering.h"
 #include "observer.h"
+#include "NoiseNorms.h"
 
 enum class sensorStatus{Active,Inactive};
 enum class sensorType { inside,outside };
-enum class  timeOfDay {day,night};
 enum class roomTypeForSensor{livingRoom,officeRoom,industrialRoom};
 
 class Sensor
@@ -14,13 +14,17 @@ class Sensor
 private:
     int id;
     sensorStatus status;
-    std::string location;
-    NoiseObserver* SensorObserver;
     timeOfDay time;
+    std::vector<NoiseObserver*> observers;
+protected:
+    Metering makeMetering(double db) const;
 public:
     virtual Metering takeMetering() const = 0;
-    Sensor(int id, sensorStatus status,NoiseObserver* SensorObserver,timeOfDay timeOfDay);
-    virtual ~Sensor() {}
+    Sensor(int id, sensorStatus status,timeOfDay timeOfDay);
+    void attach(NoiseObserver* observ);
+    void Notify(double limit) const;
+    bool isActive() const;
+    virtual ~Sensor();
 };
 
 
@@ -30,7 +34,7 @@ private:
     roomTypeForSensor roomType;
 public:
     Metering takeMetering() const override;
-    InSideSensor(int id, sensorStatus status,NoiseObserver* SensorObserver,timeOfDay timeOfDay, roomTypeForSensor roomType);
+    InSideSensor(int id, sensorStatus status,timeOfDay timeOfDay, roomTypeForSensor roomType);
 };
 
 
@@ -41,14 +45,14 @@ private:
     bool isRaining;
 public:
     Metering takeMetering() const override;
-    OutSideSensor(int id, sensorStatus status,NoiseObserver* SensorObserver,timeOfDay timeOfDay,int windSpeed,bool isRaining);
+    OutSideSensor(int id, sensorStatus status,timeOfDay timeOfDay,int windSpeed,bool isRaining);
 };
 
 
 class SensorFactory
 {
 public:
-    static Sensor* createSensor(const sensorType type, int id, sensorStatus status,NoiseObserver* SensorObserver,timeOfDay timeOfDay);
+    static Sensor* createSensor(const sensorType type, int id, sensorStatus status,timeOfDay timeOfDay);
 };
 
 

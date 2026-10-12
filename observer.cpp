@@ -1,5 +1,11 @@
 #include "observer.h"
-
-void NoiseAlert::MaxNoiseDetected(int id,std::string location,double decibels) const
+#include <iostream>
+NoiseObserver::~NoiseObserver()
 {
+
+}
+void NoiseAlert::MaxNoiseDetected(const Metering& met) const
+{
+    std::cout << "ALERT! ";
+    met.printTo(std::cout);
 }

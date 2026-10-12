@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(KursovRabotaTheme9 main.cpp "Metering.h" "Metering.cpp" "Sensor.h" "Sensor.cpp"
     observer.h
-    observer.cpp)
+    observer.cpp
+    NoiseNorms.h
+    NoiseNorms.cpp)
 
 include(GNUInstallDirs)
 install(TARGETS KursovRabotaTheme9
