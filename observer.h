@@ -26,12 +26,3 @@ public:
     void MaxNoiseDetected(const Metering& met)const override;
 };
 
-class NoiseStatistics: public NoiseObserver
-{
-
-};
-
-class NoiseAnalization: public NoiseObserver
-{
-
-};
