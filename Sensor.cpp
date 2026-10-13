@@ -1,6 +1,6 @@
 #include "Sensor.h"
 #include <ctime>
-
+#include<random>
 
 Sensor::Sensor(int id, sensorStatus status,timeOfDay timeOfDay)
 {
@@ -76,7 +76,11 @@ placeType InSideSensor::place() const
 }
 Metering InSideSensor::takeMetering() const
 {
-    double db=30;
+    std::random_device randDev;
+    std::mt19937 gen(randDev());
+    std::uniform_int_distribution<int> distrib(25,35);
+    double db=distrib(randDev);
+
     if(roomType==roomTypeForSensor::industrialRoom)db+=15;
     else if(roomType==roomTypeForSensor::livingRoom)db+=5;
     else db+=10;
@@ -95,7 +99,11 @@ placeType OutSideSensor::place() const
 
 Metering OutSideSensor::takeMetering() const
 {
-    double db = 40 + windSpeed * 0.3;
+    std::random_device randDev;
+    std::mt19937 gen(randDev());
+    std::uniform_int_distribution<int> distrib(35,45);
+    double db=distrib(randDev) + windSpeed * 0.3;;
+
     if(isRaining)db+=5;
     return makeMetering(db);
 }
